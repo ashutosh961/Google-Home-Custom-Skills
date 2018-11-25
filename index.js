@@ -46,7 +46,6 @@ restService.post("/echo", function(req, res) {
     displayText: speech,
       address:ip,
       mac:mac,
-     // wake_flag:wake_flag,
     source: "webhook-echo-sample",
       filepointer:fs,
   });
