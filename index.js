@@ -34,7 +34,7 @@ restService.post("/echo", function(req, res) {
     //     wake_flag = true
     // });
 
-    wol.wake(mac, {
+    nwol.wake(mac, {
         address: ip,
         port: 80
     }, function(error) {
