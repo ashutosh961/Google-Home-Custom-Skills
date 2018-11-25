@@ -27,13 +27,13 @@ restService.post("/echo", function(req, res) {
     var ip = networkInterfaces['eth0'][0]['address']
     var mac = networkInterfaces['eth0'][0]['mac']
 
-    const wol = require('wake-on-lan')
-    var wake_flag  = false
+    // const wol = require('wake-on-lan')
+    // var wake_flag  = false
 // MAC is case-insensitive. colons optional
-    wol(mac).then(() => {
-        console.log('wol sent!')
-        wake_flag = true
-    });
+//     wol(mac).then(() => {
+//         console.log('wol sent!')
+//         wake_flag = true
+//     });
 
   var speech =
     req.body.result &&
