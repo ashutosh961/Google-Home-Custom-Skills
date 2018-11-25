@@ -29,7 +29,6 @@ restService.post("/echo", function(req, res) {
 
      const wol = require('wake-on-lan')
     const nwol = require('node-wol')
-    var wake_flag  = false
 // MAC is case-insensitive. colons optional
 //     wol(mac).then(() => {
 //         console.log('wol sent!')
