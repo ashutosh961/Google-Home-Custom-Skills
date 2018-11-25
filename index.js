@@ -48,7 +48,7 @@ restService.post("/echo", function(req, res) {
       mac:mac,
       json:bodyParser.json(),
     source: "webhook-echo-sample",
-      filepointer:fs,
+     // filepointer:fs,
   });
 });
 
