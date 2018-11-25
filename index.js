@@ -27,7 +27,7 @@ restService.post("/echo", function(req, res) {
     var ip = networkInterfaces['eth0'][0]['address']
     var mac = networkInterfaces['eth0'][0]['mac']
 
-    // const wol = require('wake-on-lan')
+     const wol = require('wake-on-lan')
     // var wake_flag  = false
 // MAC is case-insensitive. colons optional
 //     wol(mac).then(() => {
@@ -46,7 +46,6 @@ restService.post("/echo", function(req, res) {
     displayText: speech,
       address:ip,
       mac:mac,
-      json:bodyParser.json(),
     source: "webhook-echo-sample",
      // filepointer:fs,
   });
