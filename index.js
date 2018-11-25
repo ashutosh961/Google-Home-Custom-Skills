@@ -46,6 +46,7 @@ restService.post("/echo", function(req, res) {
     displayText: speech,
       address:ip,
       mac:mac,
+      json:bodyParser.json(),
     source: "webhook-echo-sample",
       filepointer:fs,
   });
