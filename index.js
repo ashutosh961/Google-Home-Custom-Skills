@@ -29,11 +29,20 @@ restService.post("/echo", function(req, res) {
 
      const wol = require('wake-on-lan')
     const nwol = require('node-wol')
-// MAC is case-insensitive. colons optional
-//     wol(mac).then(() => {
-//         console.log('wol sent!')
-//         wake_flag = true
-//     });
+    // wol(mac).then(() => {
+    //     console.log('wol sent!')
+    //     wake_flag = true
+    // });
+
+    wol.wake(mac, {
+        address: ip,
+        port: 80
+    }, function(error) {
+        if(error) {
+            // handle error
+            return;
+        }
+    });
 
   var speech =
     req.body.result &&
