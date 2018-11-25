@@ -33,7 +33,7 @@ restService.post("/echo", function(req, res) {
     wol(mac).then(() => {
         console.log('wol sent!')
         wake_flag = true
-    })
+    });
 
   var speech =
     req.body.result &&
