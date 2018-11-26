@@ -35,20 +35,20 @@ restService.post("/echo", function(req, res) {
     var wake_flag = false;
      const wol = require('wake-on-lan');
     const nwol = require('node-wol');
-    wol(mac).then(() => {
-        console.log('wol sent!')
-        wake_flag = true
-    });
-
-    nwol.wake(mac, {
-        address: ip,
-        port: 80,
-    }, function(error) {
-        if(error) {
-            // handle error
-            return;
-        }
-    });
+    // wol(mac).then(() => {
+    //     console.log('wol sent!')
+    //     wake_flag = true
+    // });
+    //
+    // nwol.wake(mac, {
+    //     address: ip,
+    //     port: 80,
+    // }, function(error) {
+    //     if(error) {
+    //         // handle error
+    //         return;
+    //     }
+    // });
 
   var speech =
     req.body.result &&
