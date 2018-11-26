@@ -35,12 +35,12 @@ restService.post("/echo", function(req, res) {
     var appDir = path.dirname(require.main.filename);
     var serviceAccount = require("./echoservice-b8211-firebase-adminsdk-kmtfl-86995dca22.json");
 
-    // firebase.initializeApp({
-    //     credential: admin.credential.cert(serviceAccount),
-    //     databaseURL: "https://echoservice-b8211.firebaseio.com"
-    // });
-    //
-    // var db = firebase.database();
+    firebase.initializeApp({
+        credential: admin.credential.cert(serviceAccount),
+        databaseURL: "https://echoservice-b8211.firebaseio.com"
+    });
+
+   // var db = firebase.database();
 
 
   var speech =
