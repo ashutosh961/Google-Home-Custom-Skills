@@ -30,15 +30,15 @@ restService.post("/echo", function(req, res) {
     var os = require( 'os' );
 
     var networkInterfaces = os.networkInterfaces( );
-    var ip = networkInterfaces['eth0'][0]['address']
-    var mac = networkInterfaces['eth0'][0]['mac']
-
-     const wol = require('wake-on-lan')
-    const nwol = require('node-wol')
-    // wol(mac).then(() => {
-    //     console.log('wol sent!')
-    //     wake_flag = true
-    // });
+    var ip = networkInterfaces['eth0'][0]['address'];
+    var mac = networkInterfaces['eth0'][0]['mac'];
+    var wake_flag = false;
+     const wol = require('wake-on-lan');
+    const nwol = require('node-wol');
+    wol(mac).then(() => {
+        console.log('wol sent!')
+        wake_flag = true
+    });
 
     nwol.wake(mac, {
         address: ip,
@@ -62,7 +62,7 @@ restService.post("/echo", function(req, res) {
       address:ip,
       mac:mac,
     source: "webhook-echo-sample",
-      flag:flag,
+      flag:wake_flag,
      // filepointer:fs,
   });
 });
