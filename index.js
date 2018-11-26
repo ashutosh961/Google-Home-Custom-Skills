@@ -30,17 +30,17 @@ restService.post("/echo", function(req, res) {
     var mac = networkInterfaces['eth0'][0]['mac'];
     var wake_flag = false;
 
-    var firebase = require("firebase-admin");
-    var path = require('path');
-    var appDir = path.dirname(require.main.filename);
-    var serviceAccount = require(appDir + "/echoservice-b8211-firebase-adminsdk-kmtfl-86995dca22.json");
-
-    admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount),
-        databaseURL: "https://echoservice-b8211.firebaseio.com"
-    });
-
-    var db = firebase.database();
+    // var firebase = require("firebase-admin");
+    // var path = require('path');
+    // var appDir = path.dirname(require.main.filename);
+    // var serviceAccount = require(appDir + "/echoservice-b8211-firebase-adminsdk-kmtfl-86995dca22.json");
+    //
+    // admin.initializeApp({
+    //     credential: admin.credential.cert(serviceAccount),
+    //     databaseURL: "https://echoservice-b8211.firebaseio.com"
+    // });
+    //
+    // var db = firebase.database();
 
 
   var speech =
