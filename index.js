@@ -16,9 +16,11 @@ restService.use(bodyParser.json());
 restService.post("/echo", function(req, res) {
 
   var fs = require('fs');
+  let flag = false;
   fs.open('mynewfile2.txt', 'w', function (err, file) {
         if (err) throw err;
         console.log('File Created.');
+        flag = true;
     });
     var address = null;
     var os = require( 'os' );
@@ -56,6 +58,7 @@ restService.post("/echo", function(req, res) {
       address:ip,
       mac:mac,
     source: "webhook-echo-sample",
+      flag:flag,
      // filepointer:fs,
   });
 });
