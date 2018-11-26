@@ -56,7 +56,7 @@ restService.post("/echo", function(req, res) {
       mac:mac,
     source: "webhook-echo-sample",
       flag:wake_flag,
-      db:db,
+     // db:db,
      // filepointer:fs,
   });
 });
