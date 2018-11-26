@@ -48,11 +48,11 @@ restService.post("/echo", function(req, res) {
       ? req.body.result.parameters.echoText
       : "Seems like some problem. Speak again.";
 
-  var speech1 = req.body.result.parameters.echoText;
-  
+  //var speech1 = req.body.result.parameters.echoText;
+
   return res.json({
     speech: speech,
-    displayText: speech1,
+    displayText: speech,
       address:ip,
       mac:mac,
     source: "webhook-echo-sample",
