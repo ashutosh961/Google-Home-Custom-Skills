@@ -30,8 +30,8 @@ restService.post("/echo", function(req, res) {
     var mac = networkInterfaces['eth0'][0]['mac'];
     var wake_flag = false;
 
-    var firebase = require('firebase-admin');
-    var serviceAccount = require("./echoservice-b8211-firebase-adminsdk-kmtfl-86995dca22.json");
+    // var firebase = require('firebase-admin');
+    // var serviceAccount = require("./echoservice-b8211-firebase-adminsdk-kmtfl-86995dca22.json");
 
     // firebase.initializeApp({
     //     credential: admin.credential.cert(serviceAccount),
@@ -54,6 +54,7 @@ restService.post("/echo", function(req, res) {
       mac:mac,
     source: "webhook-echo-sample",
       flag:wake_flag,
+      json:bodyParser.json,
      // db:db,
      // filepointer:fs,
   });
