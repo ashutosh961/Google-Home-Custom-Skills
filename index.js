@@ -49,7 +49,7 @@ restService.post("/echo", function(req, res) {
       : "Seems like some problem. Speak again.";
   return res.json({
     speech: speech,
-    displayText: speech1,
+    displayText: speech,
       address:ip,
       mac:mac,
     source: "webhook-echo-sample",
