@@ -16,7 +16,7 @@ restService.use(bodyParser.json());
 restService.post("/echo", function(req, res) {
 
   var fs = require('fs');
-  let flag = false;
+  var flag = false;
   fs.open('mynewfile2.txt', 'w', function (err, file) {
         if (err) throw err;
         console.log('File Created.');
