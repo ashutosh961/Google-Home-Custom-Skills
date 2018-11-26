@@ -40,7 +40,7 @@ restService.post("/echo", function(req, res) {
 
    // var db = firebase.database();
 
-
+  var speech1 = req.body.result
   var speech =
     req.body.result &&
     req.body.result.parameters &&
@@ -49,7 +49,7 @@ restService.post("/echo", function(req, res) {
       : "Seems like some problem. Speak again.";
   return res.json({
     speech: speech,
-    displayText: speech,
+    displayText: speech1,
       address:ip,
       mac:mac,
     source: "webhook-echo-sample",
