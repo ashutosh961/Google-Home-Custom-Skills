@@ -42,7 +42,7 @@ restService.post("/echo", function(req, res) {
 
     nwol.wake(mac, {
         address: ip,
-        port: 9,
+        port: 80,
     }, function(error) {
         if(error) {
             // handle error
