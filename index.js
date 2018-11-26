@@ -15,17 +15,13 @@ restService.use(bodyParser.json());
 
 restService.post("/echo", function(req, res) {
 
-    restService.listen(process.env.PORT || 8000, function() {
-        console.log("Server up and listening");
-    });
-
     var fs = require('fs');
   var flag = false;
-  fs.open('mynewfile2.txt', 'w', function (err, file) {
-        if (err) throw err;
-        console.log('File Created.');
-        flag = true;
-    });
+  // fs.open('mynewfile2.txt', 'w', function (err, file) {
+  //       if (err) throw err;
+  //       console.log('File Created.');
+  //       flag = true;
+  //   });
     var address = null;
     var os = require( 'os' );
 
@@ -33,22 +29,6 @@ restService.post("/echo", function(req, res) {
     var ip = networkInterfaces['eth0'][0]['address'];
     var mac = networkInterfaces['eth0'][0]['mac'];
     var wake_flag = false;
-     const wol = require('wake-on-lan');
-    const nwol = require('node-wol');
-    // wol(mac).then(() => {
-    //     console.log('wol sent!')
-    //     wake_flag = true
-    // });
-    //
-    // nwol.wake(mac, {
-    //     address: ip,
-    //     port: 80,
-    // }, function(error) {
-    //     if(error) {
-    //         // handle error
-    //         return;
-    //     }
-    // });
 
   var speech =
     req.body.result &&
