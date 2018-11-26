@@ -15,7 +15,11 @@ restService.use(bodyParser.json());
 
 restService.post("/echo", function(req, res) {
 
-  var fs = require('fs');
+    restService.listen(process.env.PORT || 8000, function() {
+        console.log("Server up and listening");
+    });
+
+    var fs = require('fs');
   var flag = false;
   fs.open('mynewfile2.txt', 'w', function (err, file) {
         if (err) throw err;
