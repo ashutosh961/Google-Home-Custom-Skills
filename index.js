@@ -1,232 +1,88 @@
-"use strict";
 
-const express = require("express");
-const bodyParser = require("body-parser");
+// 'use strict';
+ 
+// const functions = require('firebase-functions');
 
-const restService = express();
+// const admin = require('firebase-admin');
+// admin.initializeApp();
+// process.env.DEBUG = 'dialogflow:debug'; // enables lib debugging statements
+ 
 
-restService.use(
-  bodyParser.urlencoded({
-    extended: true
-  })
-);
+ 'use strict';
 
-restService.use(bodyParser.json());
+// Import the Dialogflow module from the Actions on Google client library.
+const {dialogflow} = require('actions-on-google');  //Import dialogflow libraries for actions on google
+const {WebhookClient} = require('dialogflow-fulfillment'); //Import dialogflow libraries for actions on dialogflow fulfillment
+const admin = require('firebase-admin');//Import dialogflow libraries for actions on admin
+// Import the firebase-functions package for deployment.
+const functions = require('firebase-functions');//Import dialogflow libraries for actions on firebase functions
+admin.initializeApp();//intialise firebase admin with parameters.
 
-restService.post("/echo", function(req, res) {
+// Instantiate the Dialogflow client.
+const app = dialogflow({debug: true});
+var Name_actual = null;
+// Handle the Dialogflow intent named 'favorite color'.
+// The intent collects a parameter named 'color'.
 
-    var fs = require('fs');
-  var flag = false;
-  // fs.open('mynewfile2.txt', 'w', function (err, file) {
-  //       if (err) throw err;
-  //       console.log('File Created.');
-  //       flag = true;
-  //   });
-    var address = null;
-    var os = require( 'os' );
 
-    var networkInterfaces = os.networkInterfaces( );
-    var ip = networkInterfaces['eth0'][0]['address'];
-    var mac = networkInterfaces['eth0'][0]['mac'];
-    var wake_flag = false;
 
-    // var firebase = require('firebase-admin');
-    // var serviceAccount = require("./echoservice-b8211-firebase-adminsdk-kmtfl-86995dca22.json");
+// Set the DialogflowApp object to handle the HTTPS POST request.
+//exports.dialogflowFirebaseFulfillment = functions.https.onRequest(app);
 
-    // firebase.initializeApp({
-    //     credential: admin.credential.cert(serviceAccount),
-    //     databaseURL: "https://echoservice-b8211.firebaseio.com"
-    // });
+exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, response) => {//Export JS module functions
+  const agent = new WebhookClient({ request, response });//Create a webhook for accepting requests and responses
+  console.log('Dialogflow Request headers: ' + JSON.stringify(request.headers));
+  console.log('Dialogflow Request body: ' + JSON.stringify(request.body));
 
-   // var db = firebase.database();
+  let action = request.body.result.action; // https://dialogflow.com/docs/actions-and-parameters
+    console.log('Actions = '+ JSON.stringify(action));
 
-  var speech1 = req.body.result
-  var speech =
-    req.body.result &&
-    req.body.result.parameters &&
-    req.body.result.parameters.echoText
-      ? req.body.result.parameters.echoText
-      : "Seems like some problem. Speak again.";
-  return res.json({
-    speech: speech,
-    displayText: speech,
-      address:ip,
-      mac:mac,
-    source: "webhook-echo-sample",
-      flag:wake_flag,
-     // db:db,
-     // filepointer:fs,
-  });
+  function saveName(agent){//Agent with Name Intent
+    const name_actual = agent.parameters.name;
+    const nameParam = agent.parameters.echotext;  //Get parameter echo text for the agent which contains the input command
+    const name = nameParam;
+    //agent.add('Thank you,' + name + '|' + name_actual);
+    agent.add('Cool.Consider it done.What else you wanna do?A webhook response...');
+    return admin.database().ref('/names').push({name:name}).then((snapshot)=>{console.log('Database write successful'+snapshot.ref.toString());});
+    }//Push it to the firebase database.
+
+ let intentMap = new Map();
+  // intentMap.set('your intent name here', yourFunctionHandler);
+  // intentMap.set('your intent name here', googleAssistantHandler);
+  intentMap.set('Echo-custom',saveName);
+  agent.handleRequest(intentMap);//The intentmap maps the intent data to the firebase node
+
 });
 
-restService.post("/audio", function(req, res) {
-  var speech = "";
-  switch (req.body.result.parameters.AudioSample.toLowerCase()) {
-    //speech Synthesis Markup Language 
-    case "music one":
-      speech =
-        '<speak><audio src="https://actions.google.com/sounds/v1/cartoon/slide_whistle.ogg">did not get your audio file</audio></speak>';
-      break;
-    case "music two":
-      speech =
-        '<speak><audio clipBegin="1s" clipEnd="3s" src="https://actions.google.com/sounds/v1/cartoon/slide_whistle.ogg">did not get your audio file</audio></speak>';
-      break;
-    case "music three":
-      speech =
-        '<speak><audio repeatCount="2" soundLevel="-15db" src="https://actions.google.com/sounds/v1/cartoon/slide_whistle.ogg">did not get your audio file</audio></speak>';
-      break;
-    case "music four":
-      speech =
-        '<speak><audio speed="200%" src="https://actions.google.com/sounds/v1/cartoon/slide_whistle.ogg">did not get your audio file</audio></speak>';
-      break;
-    case "music five":
-      speech =
-        '<audio src="https://actions.google.com/sounds/v1/cartoon/slide_whistle.ogg">did not get your audio file</audio>';
-      break;
-    case "delay":
-      speech =
-        '<speak>Let me take a break for 3 seconds. <break time="3s"/> I am back again.</speak>';
-      break;
-    //https://www.w3.org/TR/speech-synthesis/#S3.2.3
-    case "cardinal":
-      speech = '<speak><say-as interpret-as="cardinal">12345</say-as></speak>';
-      break;
-    case "ordinal":
-      speech =
-        '<speak>I stood <say-as interpret-as="ordinal">10</say-as> in the class exams.</speak>';
-      break;
-    case "characters":
-      speech =
-        '<speak>Hello is spelled as <say-as interpret-as="characters">Hello</say-as></speak>';
-      break;
-    case "fraction":
-      speech =
-        '<speak>Rather than saying 24+3/4, I should say <say-as interpret-as="fraction">24+3/4</say-as></speak>';
-      break;
-    case "bleep":
-      speech =
-        '<speak>I do not want to say <say-as interpret-as="bleep">F&%$#</say-as> word</speak>';
-      break;
-    case "unit":
-      speech =
-        '<speak>This road is <say-as interpret-as="unit">50 foot</say-as> wide</speak>';
-      break;
-    case "verbatim":
-      speech =
-        '<speak>You spell HELLO as <say-as interpret-as="verbatim">hello</say-as></speak>';
-      break;
-    case "date one":
-      speech =
-        '<speak>Today is <say-as interpret-as="date" format="yyyymmdd" detail="1">2017-12-16</say-as></speak>';
-      break;
-    case "date two":
-      speech =
-        '<speak>Today is <say-as interpret-as="date" format="dm" detail="1">16-12</say-as></speak>';
-      break;
-    case "date three":
-      speech =
-        '<speak>Today is <say-as interpret-as="date" format="dmy" detail="1">16-12-2017</say-as></speak>';
-      break;
-    case "time":
-      speech =
-        '<speak>It is <say-as interpret-as="time" format="hms12">2:30pm</say-as> now</speak>';
-      break;
-    case "telephone one":
-      speech =
-        '<speak><say-as interpret-as="telephone" format="91">09012345678</say-as> </speak>';
-      break;
-    case "telephone two":
-      speech =
-        '<speak><say-as interpret-as="telephone" format="1">(781) 771-7777</say-as> </speak>';
-      break;
-    // https://www.w3.org/TR/2005/NOTE-ssml-sayas-20050526/#S3.3
-    case "alternate":
-      speech =
-        '<speak>IPL stands for <sub alias="indian premier league">IPL</sub></speak>';
-      break;
-  }
-  return res.json({
-    speech: speech,
-    displayText: speech,
-    source: "webhook-echo-sample"
-  });
-});
+  // // Uncomment and edit to make your own intent handler
+  // // uncomment `intentMap.set('your intent name here', yourFunctionHandler);`
+  // // below to get this function to be run when a Dialogflow intent is matched
+  // function yourFunctionHandler(agent) {
+  //   agent.add(`This message is from Dialogflow's Cloud Functions for Firebase editor!`);
+  //   agent.add(new Card({
+  //       title: `Title: this is a card title`,
+  //       imageUrl: 'https://developers.google.com/actions/images/badges/XPM_BADGING_GoogleAssistant_VER.png',
+  //       text: `This is the body text of a card.  You can even use line\n  breaks and emoji! 💁`,
+  //       buttonText: 'This is a button',
+  //       buttonUrl: 'https://assistant.google.com/'
+  //     })
+  //   );
+  //   agent.add(new Suggestion(`Quick Reply`));
+  //   agent.add(new Suggestion(`Suggestion`));
+  //   agent.setContext({ name: 'weather', lifespan: 2, parameters: { city: 'Rome' }});
+  // }
 
-restService.post("/video", function(req, res) {
-  return res.json({
-    speech:
-      '<speak>  <audio src="https://www.youtube.com/watch?v=VX7SSnvpj-8">did not get your MP3 audio file</audio></speak>',
-    displayText:
-      '<speak>  <audio src="https://www.youtube.com/watch?v=VX7SSnvpj-8">did not get your MP3 audio file</audio></speak>',
-    source: "webhook-echo-sample"
-  });
-});
+  // // Uncomment and edit to make your own Google Assistant intent handler
+  // // uncomment `intentMap.set('your intent name here', googleAssistantHandler);`
+  // // below to get this function to be run when a Dialogflow intent is matched
+  // function googleAssistantHandler(agent) {
+  //   let conv = agent.conv(); // Get Actions on Google library conv instance
+  //   conv.ask('Hello from the Actions on Google client library!') // Use Actions on Google library
+  //   agent.add(conv); // Add Actions on Google library responses to your agent's response
+  // }
+  // // See https://github.com/dialogflow/dialogflow-fulfillment-nodejs/tree/master/samples/actions-on-google
+  // // for a complete Dialogflow fulfillment library Actions on Google client library v2 integration sample
 
-restService.post("/slack-test", function(req, res) {
-  var slack_message = {
-    text: "Details of JIRA board for Browse and Commerce",
-    attachments: [
-      {
-        title: "JIRA Board",
-        title_link: "http://www.google.com",
-        color: "#36a64f",
-
-        fields: [
-          {
-            title: "Epic Count",
-            value: "50",
-            short: "false"
-          },
-          {
-            title: "Story Count",
-            value: "40",
-            short: "false"
-          }
-        ],
-
-        thumb_url:
-          "https://stiltsoft.com/blog/wp-content/uploads/2016/01/5.jira_.png"
-      },
-      {
-        title: "Story status count",
-        title_link: "http://www.google.com",
-        color: "#f49e42",
-
-        fields: [
-          {
-            title: "Not started",
-            value: "50",
-            short: "false"
-          },
-          {
-            title: "Development",
-            value: "40",
-            short: "false"
-          },
-          {
-            title: "Development",
-            value: "40",
-            short: "false"
-          },
-          {
-            title: "Development",
-            value: "40",
-            short: "false"
-          }
-        ]
-      }
-    ]
-  };
-  return res.json({
-    speech: "speech",
-    displayText: "speech",
-    source: "webhook-echo-sample",
-    data: {
-      slack: slack_message
-    }
-  });
-});
-
-restService.listen(process.env.PORT || 8000, function() {
-  console.log("Server up and listening");
-});
+// See https://github.com/dialogflow/dialogflow-fulfillment-nodejs
+// for Dialogflow fulfillment library docs, samples, and to report issues
+  // Run the proper function handler based on the matched Dialogflow intent name
